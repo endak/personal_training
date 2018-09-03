@@ -1,50 +1,55 @@
 #configure provider
 provider "aws" {
-    shared_credentials_file = "$HOME/.aws/credentials/hippogriffin-aws-secret"
-    region = "eu-west-1"
-}
-
-#configure vpc
-resource "aws_vpc" "hippogriffin-vpc" {
-   cidr_block = "10.0.0.0/16"
-
-   tags {
-       Name = "hippogriffin-VPC"
-   }
-}
-
-#configure subnet
-resource "aws_subnet" "hippogriffin-subnet" {
-    vpc_id = "${aws_vpc.hippogriffin-vpc.id}"
-    cidr_block = "10.0.0.0/16"
-
-    tags { 
-       Name = "hippogriffin-Subnet"
-    }
-}
-
-#configure security group
-resource "aws_security_group" "hippogriffin-security-group" {
-    vpc_id = "${aws_vpc.hippogriffin-vpc.id}"
-
-ingress {
-    protocol = -1
-    self = true
-    from_port = 0
-    to_port = 0
-}
-
-tags {
-    Name = "hippogriffin-Security-Group"
-}
+    shared_credentials_file = "$HOME/.aws/credentials/aws-secret"
+    region = "${var.region}"
 }
 
 #configure instance
-resource "aws_instance" "hippogriffin-instance" {
-   ami = "ami-3548444c"
-   instance_type = "t2.micro"
+resource "aws_instance" "${var.wordpress_instance_name}" {
+   ami = "${var.ami}"
+   instance_type = "${var.instance_type}"
 
    tags {
-       Name = "hippogriffin-Instance"
+       Name = "${var.wordpress_instance_name}"
+   }
+}
+
+#configure instance
+resource "aws_instance" "${var.db_instance_name}" {
+   ami = "${var.ami}"
+   instance_type = "${var.instance_type}"
+
+   tags {
+       Name = "${var.db_instance_name}"
+   }
+}
+
+#configure instance
+resource "aws_instance" "${var.proxy_instance_name}" {
+   ami = "${var.ami}"
+   instance_type = "${var.instance_type}"
+
+   tags {
+       Name = "${var.proxy_instance_name}"
+   }
+}
+
+#configure instance
+resource "aws_instance" "${var.jumpbox_instance_name}" {
+   ami = "${var.ami}"
+   instance_type = "${var.instance_type}"
+
+   tags {
+       Name = "${var.jumpbox_instance_name}"
+   }
+}
+
+#configure instance
+resource "aws_instance" "${var.jenkins_instance_name}" {
+   ami = "${var.ami}"
+   instance_type = "${var.instance_type}"
+
+   tags {
+       Name = "${var.jenkins_instance_name}"
    }
 }
