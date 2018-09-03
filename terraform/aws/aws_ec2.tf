@@ -1,6 +1,6 @@
 #configure provider
 provider "aws" {
-    shared_credentials_file = "$HOME/.aws/credentials/aws-secret"
+    shared_credentials_file = "${var.credentials_file}"
     region = "${var.region}"
 }
 
